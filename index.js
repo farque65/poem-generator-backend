@@ -11,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 app.post('/api/poem', async (req, res) => {
+  console.log('Received request to generate poem');
   const { topic } = req.body;
   if (!topic) {
     return res.status(400).json({ error: 'Topic is required' });
@@ -40,6 +41,8 @@ app.post('/api/poem', async (req, res) => {
 
     const data = await response.json();
     const poem = data.choices?.[0]?.text?.trim() || 'No poem generated.';
+
+    console.log('Generated poem:', poem);
 
     res.json({ poem });
   } catch (error) {
