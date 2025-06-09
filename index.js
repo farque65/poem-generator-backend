@@ -1,8 +1,6 @@
-// index.js
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { Configuration, OpenAIApi } from 'openai';
 
 dotenv.config();
 
@@ -12,11 +10,6 @@ const port = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
-
 app.post('/api/poem', async (req, res) => {
   const { topic } = req.body;
   if (!topic) {
@@ -25,13 +18,29 @@ app.post('/api/poem', async (req, res) => {
 
   try {
     const prompt = `Write a poem about ${topic}.`;
-    const response = await openai.createCompletion({
-      model: 'text-davinci-003',
-      prompt,
-      max_tokens: 150,
+
+    const response = await fetch('https://api.openai.com/v1/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'text-davinci-003',
+        prompt,
+        max_tokens: 150,
+      }),
     });
 
-    const poem = response.data.choices[0].text.trim();
+    if (!response.ok) {
+      const err = await response.json();
+      console.error('OpenAI API error:', err);
+      return res.status(500).json({ error: 'OpenAI API failed', details: err });
+    }
+
+    const data = await response.json();
+    const poem = data.choices?.[0]?.text?.trim() || 'No poem generated.';
+
     res.json({ poem });
   } catch (error) {
     console.error('Error generating poem:', error);
