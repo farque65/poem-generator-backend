@@ -5,7 +5,7 @@ services:
     build: .
     container_name: poem-generator-api
     ports:
-      - "8080:3000"  # Expose 3000 inside container as 8080 on host
+      - "127.0.0.1:8080:3000"  # only exposed to localhost
     environment:
       NODE_ENV: production
       PORT: 3000
