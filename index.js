@@ -57,6 +57,10 @@ app.post('/api/poem', async (req, res) => {
   }
 });
 
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
