@@ -1,18 +1,18 @@
-# Use Node.js LTS version
-FROM node:18
+# Use a minimal and secure base image
+FROM node:18-slim
 
 # Set working directory
 WORKDIR /app
 
 # Copy package files and install dependencies
 COPY package*.json ./
-RUN npm install
+RUN npm install --production
 
-# Copy the rest of the application
+# Copy application source
 COPY . .
 
-# Expose the port
+# Expose container port (can be overridden via Docker Compose)
 EXPOSE 3000
 
-# Start the application
-CMD ["node", "index.js"]
+# Default command
+CMD ["npm", "start"]
