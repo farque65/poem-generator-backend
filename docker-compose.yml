@@ -1,6 +1,6 @@
 
 services:
-  poem-generator-backend:
+  poem-generator-api:
     build: .
     container_name: poem-generator-api
     ports:
