@@ -5,7 +5,7 @@ services:
     build: .
     container_name: poem-generator-api
     ports:
-      - "8080:3000"  # Expose port 3000 on the host
+    - "3002:3000"  # Expose port 3000 on the host
     networks:
     - nginx-network
     environment:
@@ -23,5 +23,5 @@ services:
       start_period: 40s
     restart: unless-stopped
 
-networks:
-  nginx-network:
+# networks:
+#   nginx-network:
