@@ -1,7 +1,6 @@
-version: '3.9'
 
 services:
-  api:
+  poem-generator-backend:
     build: .
     container_name: poem-generator-api
     ports:
